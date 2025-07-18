@@ -26,6 +26,7 @@ namespace bAntiCheat_Client
             if (forbiddenProcessesResponse.passed == false)
             {
                 ThreadPool.QueueUserWorkItem(delegate { // prevents not getting drop if player doesn't click on the message
+                    MessageBox.Show("Forbidden process detected. Please kill it and click connect again" +
                     "\n\nProcess: " + forbiddenProcessesResponse.process.name + ".exe", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 });
 
