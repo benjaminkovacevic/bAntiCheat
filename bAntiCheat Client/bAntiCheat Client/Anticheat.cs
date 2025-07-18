@@ -26,7 +26,6 @@ namespace bAntiCheat_Client
             if (forbiddenProcessesResponse.passed == false)
             {
                 ThreadPool.QueueUserWorkItem(delegate { // prevents not getting drop if player doesn't click on the message
-                    MessageBox.Show("Forbidden process detected." +
                     "\n\nProcess: " + forbiddenProcessesResponse.process.name + ".exe", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 });
 
@@ -54,7 +53,7 @@ namespace bAntiCheat_Client
                     {
                         if (validateFilesResponse.file.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Changed gamefiles detected." +
+                            MessageBox.Show("Changed gamefiles detected. Please delete them and click connect again" +
                             "\n\nFile: " + validateFilesResponse.file.path +
                             "\nReason: " + validateFilesResponse.reason, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
@@ -66,7 +65,7 @@ namespace bAntiCheat_Client
                     {
                         if (forbiddenDirectoriesResponse.directory.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden directory detected." +
+                            MessageBox.Show("Forbidden directory detected. Please delete it and click connect again" +
                             "\n\nDirectory: " + forbiddenDirectoriesResponse.directory.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                             clean = false;
@@ -77,7 +76,7 @@ namespace bAntiCheat_Client
                     {
                         if (forbiddenFilesResponse.file.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden file detected." +
+                            MessageBox.Show("Forbidden file detected. Please delete it and click connect again" +
                             "\n\nFile: " + forbiddenFilesResponse.file.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                             clean = false;
@@ -88,7 +87,7 @@ namespace bAntiCheat_Client
                     {
                         if (forbiddenProcessesResponse.process.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden process detected." +
+                            MessageBox.Show("Forbidden process detected. Please kill it and click connect again" +
                             "\n\nProcess: " + forbiddenProcessesResponse.process.name + ".exe", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                             clean = false;

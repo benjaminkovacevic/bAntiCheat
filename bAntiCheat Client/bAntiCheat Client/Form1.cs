@@ -251,7 +251,7 @@ namespace bAntiCheat_Client
 
         private void materialRaisedButton2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("bAnticheat client made by bruxo. Code avaliable at: github.com/bruxo00\n\nVersion 2.0", "About", MessageBoxButtons.OK);
+            MessageBox.Show("CODE5 Anti-Cheat Client fork by [c5]perfect\n\nVersion 1.0", "About", MessageBoxButtons.OK);
 
         }
 
