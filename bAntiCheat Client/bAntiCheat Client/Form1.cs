@@ -143,7 +143,6 @@ namespace bAntiCheat_Client
                     try
                     {
                         Clipboard.SetText(p.joinCode.ToString());
-                        UpdateStatusLabel("Join code copied to clipboard.");
                     }
                     catch (Exception ex)
                     {
@@ -191,7 +190,7 @@ namespace bAntiCheat_Client
                                     }
                                     else
                                     {
-                                        UpdateStatusLabel("Validated. Waiting for player to join.");
+                                        UpdateStatusLabel("Access granted. Code copied to clipboard.");
                                     }
                                 }
                                 else if (serverMessage.Contains("WELCOME"))
@@ -239,7 +238,7 @@ namespace bAntiCheat_Client
                                 else if(serverMessage == "WRONG_SEC_CODE")
                                 {
                                     socketConnection.Close();
-                                    UpdateStatusLabel("Please update the Client.");
+                                    UpdateStatusLabel("Please update the Anti-Cheat Client.");
 
                                     UpdateJoinCodeLabel("");
                                 }

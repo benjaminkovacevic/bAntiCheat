@@ -13,3 +13,7 @@ C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Clien
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.pdb
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5_Client_Anti_Cheat.Properties.Resources.resources
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.exe.config
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.exe.manifest
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\C5-Client-Anti-Cheat.exe.manifest
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\C5-Client-Anti-Cheat.application
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.application
