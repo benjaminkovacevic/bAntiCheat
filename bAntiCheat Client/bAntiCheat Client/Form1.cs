@@ -140,7 +140,15 @@ namespace bAntiCheat_Client
                     labelPlayerName.BeginInvoke(action);
 
                     UpdateJoinCodeLabel(p.joinCode.ToString());
-
+                    try
+                    {
+                        Clipboard.SetText(p.joinCode.ToString());
+                        UpdateStatusLabel("Join code copied to clipboard.");
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLog("Failed to copy join code to clipboard: " + ex.Message);
+                    }
                     string welcomeMsg = string.Format("CONNECTED:{0}|{1}|{2}", p.uniqueID, p.securityID, p.joinCode);
                     SendMessage(welcomeMsg);
                 }
@@ -231,7 +239,7 @@ namespace bAntiCheat_Client
                                 else if(serverMessage == "WRONG_SEC_CODE")
                                 {
                                     socketConnection.Close();
-                                    UpdateStatusLabel("Disconnected. Versions don't match.");
+                                    UpdateStatusLabel("Please update the Client.");
 
                                     UpdateJoinCodeLabel("");
                                 }
@@ -256,7 +264,7 @@ namespace bAntiCheat_Client
 
         private void materialRaisedButton2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("CODE5 Anti-Cheat Client fork by [c5]perfect\n\nVersion 1.0", "About", MessageBoxButtons.OK);
+            MessageBox.Show("lscnr.code5gaming.com/anticheat.php\n\nVersion 1.1", "About", MessageBoxButtons.OK);
 
         }
 

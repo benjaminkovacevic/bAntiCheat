@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6D0EF88D-EC62-4B7E-A0B0-82C2D87E323B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>C5-Client-Anti-Cheat</RootNamespace>
+    <RootNamespace>C5_Client_Anti_Cheat</RootNamespace>
     <AssemblyName>C5-Client-Anti-Cheat</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

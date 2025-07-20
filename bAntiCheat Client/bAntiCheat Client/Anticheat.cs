@@ -228,42 +228,51 @@ namespace bAntiCheat_Client
             return response;
         }
 
-        public object CheckForbiddenChecksums()
-        {
-            string gtaPath = GetGTADirectory();
-            dynamic response = new ExpandoObject();
-            response.passed = true;
-            response.checksum = null;
-            response.filePath = null;
+public object CheckForbiddenChecksums()
+{
+    string gtaPath = GetGTADirectory();
+    dynamic response = new ExpandoObject();
+    response.passed = true;
+    response.checksum = null;
+    response.filePath = null;
 
-            foreach (Forbiddenchecksum checksumItem in req.info.forbiddenChecksums)
+    const long maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
+    foreach (Forbiddenchecksum checksumItem in req.info.forbiddenChecksums)
+    {
+        // Search through all files in GTA directory and subdirectories
+        string[] allFiles = Directory.GetFiles(gtaPath, "*.*", SearchOption.AllDirectories);
+        
+        foreach (string filePath in allFiles)
+        {
+            try
             {
-                // Search through all files in GTA directory and subdirectories
-                string[] allFiles = Directory.GetFiles(gtaPath, "*.*", SearchOption.AllDirectories);
-                
-                foreach (string filePath in allFiles)
+                // Check file size before calculating checksum
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Length > maxFileSize)
                 {
-                    try
-                    {
-                        string fileChecksum = GetChecksum(filePath);
-                        if (fileChecksum.Equals(checksumItem.hash, StringComparison.OrdinalIgnoreCase))
-                        {
-                            response.passed = false;
-                            response.checksum = checksumItem;
-                            response.filePath = filePath;
-                            return response; // Exit immediately when found
-                        }
-                    }
-                    catch
-                    {
-                        // Skip files that can't be read (locked, permissions, etc.)
-                        continue;
-                    }
+                    continue; // Skip files larger than 5MB
+                }
+
+                string fileChecksum = GetChecksum(filePath);
+                if (fileChecksum.Equals(checksumItem.hash, StringComparison.OrdinalIgnoreCase))
+                {
+                    response.passed = false;
+                    response.checksum = checksumItem;
+                    response.filePath = filePath;
+                    return response; // Exit immediately when found
                 }
             }
-
-            return response;
+            catch
+            {
+                // Skip files that can't be read (locked, permissions, etc.)
+                continue;
+            }
         }
+    }
+
+    return response;
+}
 
         public static string GetGTADirectory()
         {
