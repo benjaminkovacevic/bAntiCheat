@@ -27,20 +27,25 @@ namespace bAntiCheat_Client
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.DeepOrange800, Primary.DeepOrange900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
 
-            if(!Directory.Exists(dataPath))
+            if (!Directory.Exists(dataPath))
             {
-                if(string.IsNullOrEmpty(Anticheat.GetGTAPath())) {
+                if (string.IsNullOrEmpty(Anticheat.GetGTAPath()))
+                {
                     MessageBox.Show("Can't find the GTA installation directory. Please reinstall SAMP.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(-1);
                 }
 
                 Directory.CreateDirectory(dataPath);
-                File.WriteAllLines(Path.Combine(dataPath, "data.txt"), new string[] { "127.0.0.1", "9014"});
+                File.WriteAllLines(Path.Combine(dataPath, "data.txt"), new string[] { "lscnr.code5gaming.com", "9014" });
             }
 
             string[] lines = File.ReadAllLines(Path.Combine(dataPath, "data.txt"));
             textBoxIp.Text = lines[0].Trim();
             textBoxPort.Text = lines[1].Trim();
+
+            // Make IP text box read-only
+            textBoxIp.ReadOnly = true;
+            textBoxPort.ReadOnly = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
