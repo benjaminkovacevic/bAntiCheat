@@ -40,6 +40,8 @@ namespace bAntiCheat_Client
         public Forbiddenfile[] forbiddenFiles { get; set; }
         public Forbiddenndirectory[] forbiddenDirectories { get; set; }
         public Forbiddenprocess[] forbiddenProcesses { get; set; }
+        public Forbiddenchecksum[] forbiddenChecksums { get; set; } // Add this line
+
     }
 
     public class Validationfile
@@ -64,6 +66,13 @@ namespace bAntiCheat_Client
     public class Forbiddenprocess
     {
         public string name { get; set; }
+        public string action { get; set; }
+    }
+
+    public class Forbiddenchecksum
+    {
+        public string hash { get; set; }
+        public string description { get; set; }
         public string action { get; set; }
     }
 

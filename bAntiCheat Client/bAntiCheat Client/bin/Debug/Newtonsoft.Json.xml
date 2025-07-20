@@ -933,7 +933,7 @@
             </summary>
             <value><c>true</c> if the array attribute is written to the XML; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Newtonsoft.Json.Converters.XmlNodeConverter.OmitRootObject">
+        <member name="P:Newtonsoft.Json.Converters.XmlNodeConverter.Omit">
             <summary>
             Gets or sets a value indicating whether to write the root JSON object.
             </summary>
@@ -1799,11 +1799,11 @@
         </member>
         <member name="M:Newtonsoft.Json.JsonConvert.SerializeXmlNode(System.Xml.XmlNode,Newtonsoft.Json.Formatting,System.Boolean)">
             <summary>
-            Serializes the <see cref="T:System.Xml.XmlNode"/> to a JSON string using formatting and omits the root object if <paramref name="omitRootObject"/> is <c>true</c>.
+            Serializes the <see cref="T:System.Xml.XmlNode"/> to a JSON string using formatting and omits the root object if <paramref name="omit"/> is <c>true</c>.
             </summary>
             <param name="node">The node to serialize.</param>
             <param name="formatting">Indicates how the output should be formatted.</param>
-            <param name="omitRootObject">Omits writing the root object.</param>
+            <param name="omit">Omits writing the root object.</param>
             <returns>A JSON string of the <see cref="T:System.Xml.XmlNode"/>.</returns>
         </member>
         <member name="M:Newtonsoft.Json.JsonConvert.DeserializeXmlNode(System.String)">
@@ -1870,11 +1870,11 @@
         </member>
         <member name="M:Newtonsoft.Json.JsonConvert.SerializeXNode(System.Xml.Linq.XObject,Newtonsoft.Json.Formatting,System.Boolean)">
             <summary>
-            Serializes the <see cref="T:System.Xml.Linq.XNode"/> to a JSON string using formatting and omits the root object if <paramref name="omitRootObject"/> is <c>true</c>.
+            Serializes the <see cref="T:System.Xml.Linq.XNode"/> to a JSON string using formatting and omits the root object if <paramref name="omit"/> is <c>true</c>.
             </summary>
             <param name="node">The node to serialize.</param>
             <param name="formatting">Indicates how the output should be formatted.</param>
-            <param name="omitRootObject">Omits writing the root object.</param>
+            <param name="omit">Omits writing the root object.</param>
             <returns>A JSON string of the <see cref="T:System.Xml.Linq.XNode"/>.</returns>
         </member>
         <member name="M:Newtonsoft.Json.JsonConvert.DeserializeXNode(System.String)">
