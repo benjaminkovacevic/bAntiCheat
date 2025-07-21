@@ -176,7 +176,7 @@ namespace bAntiCheat_Client
 
                                 if (serverMessage.Contains("CONNECTED"))
                                 {
-                                    UpdateStatusLabel("Connected. Validating server configs.");
+                                    UpdateStatusLabel("Please wait.. Validating server configs.");
 
                                     string[] temp = serverMessage.Split('|');
 
