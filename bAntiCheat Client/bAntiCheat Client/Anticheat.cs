@@ -50,6 +50,8 @@ namespace bAntiCheat_Client
                     dynamic forbiddenDirectoriesResponse = CheckForbiddenDirectories();
                     dynamic forbiddenProcessesResponse = CheckForbiddenProcesses();
                     dynamic forbiddenChecksumsResponse = CheckForbiddenChecksums();
+                    dynamic whitelistedDirectoriesResponse = CheckWhitelistedDirectories(); // Add this line
+
 
                     if (validateFilesResponse.passed == false)
                     {
@@ -62,6 +64,8 @@ namespace bAntiCheat_Client
                             clean = false;
                         }
                     }
+
+
 
                     if (forbiddenDirectoriesResponse.passed == false)
                     {
@@ -103,6 +107,18 @@ namespace bAntiCheat_Client
                             MessageBox.Show("Forbidden file detected. Please delete it and click connect again" +
                             "\n\nFile: " + forbiddenChecksumsResponse.filePath +
                             "\nDescription: " + forbiddenChecksumsResponse.checksum.description, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                            clean = false;
+                        }
+                    }
+                    
+                    if (whitelistedDirectoriesResponse.passed == false)
+                    {
+                        if (whitelistedDirectoriesResponse.directory.action == "PREVENT_CONNECT")
+                        {
+                            MessageBox.Show("Non-whitelisted file detected in cleo directory. Please remove it and click connect again" +
+                            "\n\nFile: " + whitelistedDirectoriesResponse.invalidFile +
+                            "\nDirectory: " + whitelistedDirectoriesResponse.directory.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                             clean = false;
                         }
@@ -186,6 +202,68 @@ namespace bAntiCheat_Client
             return response;
         }
 
+        public object CheckWhitelistedDirectories()
+        {
+            string gtaPath = GetGTADirectory();
+            dynamic response = new ExpandoObject();
+            response.passed = true;
+            response.directory = null;
+            response.invalidFile = null;
+
+            if (req.info.whitelistedDirectories == null)
+                return response;
+
+            foreach (Whitelisteddirectory directory in req.info.whitelistedDirectories)
+            {
+                string directoryPath = Path.Combine(gtaPath, directory.path);
+
+                if (Directory.Exists(directoryPath))
+                {
+                    // Get all files in the whitelisted directory
+                    string[] allFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+
+                    foreach (string filePath in allFiles)
+                    {
+                        string fileName = Path.GetFileName(filePath);
+                        bool fileAllowed = false;
+
+                        // Check if this file is in the allowed list
+                        foreach (Allowedfile allowedFile in directory.allowedFiles)
+                        {
+                            if (fileName.Equals(allowedFile.filename, StringComparison.OrdinalIgnoreCase))
+                            {
+                                try
+                                {
+                                    string fileChecksum = GetChecksum(filePath);
+                                    if (fileChecksum.Equals(allowedFile.hash, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        fileAllowed = true;
+                                        break; // File is whitelisted and checksum matches
+                                    }
+                                }
+                                catch
+                                {
+                                    // Skip files that can't be read
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // If file is not allowed, fail the check
+                        if (!fileAllowed)
+                        {
+                            response.passed = false;
+                            response.directory = directory;
+                            response.invalidFile = filePath;
+                            return response;
+                        }
+                    }
+                }
+            }
+
+            return response;
+        }
+
         public object CheckForbiddenProcesses()
         {
             dynamic response = new ExpandoObject();
@@ -194,7 +272,7 @@ namespace bAntiCheat_Client
 
             foreach (Forbiddenprocess process in req.info.forbiddenProcesses)
             {
-                foreach(Process p in Process.GetProcessesByName(process.name))
+                foreach (Process p in Process.GetProcessesByName(process.name))
                 {
                     response.passed = false;
                     response.process = process;

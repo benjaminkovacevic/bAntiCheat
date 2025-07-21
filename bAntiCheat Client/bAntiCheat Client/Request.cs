@@ -31,18 +31,18 @@ namespace bAntiCheat_Client
         }
     }
 
-    public class Rootobject
-    {
-        public bool gtaRunning { get; set; }
-        public bool sampRunning { get; set; }
-        public bool monitorProcessesConstantly { get; set; }
-        public Validationfile[] validationFiles { get; set; }
-        public Forbiddenfile[] forbiddenFiles { get; set; }
-        public Forbiddenndirectory[] forbiddenDirectories { get; set; }
-        public Forbiddenprocess[] forbiddenProcesses { get; set; }
-        public Forbiddenchecksum[] forbiddenChecksums { get; set; } // Add this line
-
-    }
+public class Rootobject
+{
+    public bool gtaRunning { get; set; }
+    public bool sampRunning { get; set; }
+    public bool monitorProcessesConstantly { get; set; }
+    public Validationfile[] validationFiles { get; set; }
+    public Forbiddenfile[] forbiddenFiles { get; set; }
+    public Forbiddenndirectory[] forbiddenDirectories { get; set; }
+    public Forbiddenprocess[] forbiddenProcesses { get; set; }
+    public Forbiddenchecksum[] forbiddenChecksums { get; set; }
+    public Whitelisteddirectory[] whitelistedDirectories { get; set; } // Add this line
+}
 
     public class Validationfile
     {
@@ -76,4 +76,17 @@ namespace bAntiCheat_Client
         public string action { get; set; }
     }
 
+}
+public class Whitelisteddirectory
+{
+    public string path { get; set; }
+    public Allowedfile[] allowedFiles { get; set; }
+    public string action { get; set; }
+}
+
+public class Allowedfile
+{
+    public string filename { get; set; }
+    public string hash { get; set; }
+    public string description { get; set; }
 }

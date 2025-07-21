@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="C5-Client-Anti-Cheat.exe" size="254960">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="C5-Client-Anti-Cheat.exe" size="259056">
       <assemblyIdentity name="C5-Client-Anti-Cheat" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>KH3tYgVVDfLoK5AC4G2/eca4JO0RrhLSoipAi7AwXN4=</dsig:DigestValue>
+        <dsig:DigestValue>YF/JhnNJg3hnTZzg/FZhO2z9DdEGlxwXTqJ/KyhaMOk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
