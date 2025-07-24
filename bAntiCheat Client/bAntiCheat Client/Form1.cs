@@ -29,15 +29,19 @@ namespace bAntiCheat_Client
 
             if (!Directory.Exists(dataPath))
             {
-                if (string.IsNullOrEmpty(Anticheat.GetGTAPath()))
-                {
-                    MessageBox.Show("Can't find the GTA installation directory. Please reinstall SAMP.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.Exit(-1);
-                }
-
-                Directory.CreateDirectory(dataPath);
-                File.WriteAllLines(Path.Combine(dataPath, "data.txt"), new string[] { "lscnr.code5gaming.com", "9014" });
+            if (string.IsNullOrEmpty(Anticheat.GetGTAPath()))
+            {
+                MessageBox.Show("Can't find the GTA installation directory. Please reinstall SAMP.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
             }
+
+            Directory.CreateDirectory(dataPath);
+            }
+
+            // Always overwrite IP and port to these values
+            string defaultIp = "185.198.27.242";
+            string defaultPort = "9014";
+            File.WriteAllLines(Path.Combine(dataPath, "data.txt"), new string[] { defaultIp, defaultPort });
 
             string[] lines = File.ReadAllLines(Path.Combine(dataPath, "data.txt"));
             textBoxIp.Text = lines[0].Trim();

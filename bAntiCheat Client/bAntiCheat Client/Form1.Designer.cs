@@ -47,7 +47,7 @@
             this.textBoxIp.Name = "textBoxIp";
             this.textBoxIp.Size = new System.Drawing.Size(94, 20);
             this.textBoxIp.TabIndex = 0;
-            this.textBoxIp.Text = "192.168.1.65";
+            this.textBoxIp.Text = "185.198.27.242";
             // 
             // materialLabel1
             // 
