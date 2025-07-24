@@ -50,7 +50,7 @@ namespace bAntiCheat_Client
                     dynamic forbiddenDirectoriesResponse = CheckForbiddenDirectories();
                     dynamic forbiddenProcessesResponse = CheckForbiddenProcesses();
                     dynamic forbiddenChecksumsResponse = CheckForbiddenChecksums();
-                    dynamic whitelistedDirectoriesResponse = CheckWhitelistedDirectories(); // Add this line
+                    dynamic whitelistedDirectoriesResponse = CheckWhitelistedDirectories(); 
 
 
                     if (validateFilesResponse.passed == false)
