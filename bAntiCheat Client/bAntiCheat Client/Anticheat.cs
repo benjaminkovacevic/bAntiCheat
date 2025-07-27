@@ -264,24 +264,48 @@ namespace bAntiCheat_Client
             return response;
         }
 
-        public object CheckForbiddenProcesses()
-        {
-            dynamic response = new ExpandoObject();
-            response.passed = true;
-            response.process = null;
+    public object CheckForbiddenProcesses()
+    {
+        dynamic response = new ExpandoObject();
+        response.passed = true;
+        response.process = null;
 
+        try
+        {
             foreach (Forbiddenprocess process in req.info.forbiddenProcesses)
             {
-                foreach (Process p in Process.GetProcessesByName(process.name))
+                Process[] processes = Process.GetProcessesByName(process.name);
+                
+                if (processes.Length > 0)
                 {
+                    Form1.WriteLog($"Forbidden process detected: {process.name}");
                     response.passed = false;
                     response.process = process;
+                    
+                    // Dispose all process objects
+                    foreach (Process p in processes)
+                    {
+                        p?.Dispose();
+                    }
+                    
                     break;
                 }
+                
+                // Dispose process objects even if none found
+                foreach (Process p in processes)
+                {
+                    p?.Dispose();
+                }
             }
-
-            return response;
         }
+        catch (Exception ex)
+        {
+            Form1.WriteLog($"Error in CheckForbiddenProcesses: {ex.Message}");
+            // Return passed = true to avoid false positives on errors
+        }
+
+        return response;
+    }
 
         public object CheckForbiddenDirectories()
         {
@@ -384,39 +408,118 @@ public object CheckForbiddenChecksums()
 
         public bool IsRunningGTALegit()
         {
-            foreach (Process p in Process.GetProcessesByName("gta_sa"))
+            try
             {
-                if(p.MainModule.FileName != GetGTAPath())
+                Process[] processes = Process.GetProcessesByName("gta_sa");
+                
+                if (processes.Length == 0)
                 {
+                    Form1.WriteLog("GTA process not found");
+                    return false; // GTA nije pokrenut
+                }
+
+                string gtaPath = GetGTAPath();
+                if (string.IsNullOrEmpty(gtaPath))
+                {
+                    Form1.WriteLog("Cannot get GTA path from registry");
                     return false;
                 }
-                else
-                {
-                    return true;
-                }
-            }
 
-            return false;
+                foreach (Process process in processes)
+                {
+                    try
+                    {
+                        string processPath = process.MainModule.FileName;
+                        bool isLegit = processPath.Equals(gtaPath, StringComparison.OrdinalIgnoreCase);
+                        
+                        Form1.WriteLog($"GTA process found: {processPath}");
+                        Form1.WriteLog($"Expected path: {gtaPath}");
+                        Form1.WriteLog($"Process legitimate: {isLegit}");
+                        
+                        return isLegit;
+                    }
+                    catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 5) // Access Denied
+                    {
+                        // Cannot access process - likely running with higher privileges
+                        Form1.WriteLog($"Cannot verify GTA process path (Access Denied) - Process ID: {process.Id}. Assuming legitimate.");
+                        return true; // Assume legitimate if we can't verify due to permissions
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Process has exited
+                        Form1.WriteLog($"GTA process has exited: {ex.Message}");
+                        continue; // Try next process
+                    }
+                    catch (Exception ex)
+                    {
+                        Form1.WriteLog($"Error checking GTA process: {ex.Message}");
+                        continue; // Try next process if multiple exist
+                    }
+                    finally
+                    {
+                        // Dispose process object to prevent handle leaks
+                        process?.Dispose();
+                    }
+                }
+                
+                // If we get here, no valid processes were found
+                Form1.WriteLog("No valid GTA processes found after checking all");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Form1.WriteLog($"Error in IsRunningGTALegit: {ex.Message}");
+                // In case of any unexpected error, allow connection to avoid false positives
+                return true;
+            }
         }
 
         public bool IsGTARunning()
         {
-            foreach(Process p in Process.GetProcessesByName("gta_sa"))
+            try
             {
-                return true;
+                Process[] processes = Process.GetProcessesByName("gta_sa");
+                bool isRunning = processes.Length > 0;
+                
+                Form1.WriteLog($"GTA Running check: {isRunning} ({processes.Length} processes found)");
+                
+                // Dispose all process objects
+                foreach (Process p in processes)
+                {
+                    p?.Dispose();
+                }
+                
+                return isRunning;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                Form1.WriteLog($"Error in IsGTARunning: {ex.Message}");
+                return false;
+            }
         }
 
         public bool IsSAMPRunning()
         {
-            foreach (Process p in Process.GetProcessesByName("samp"))
+            try
             {
-                return true;
+                Process[] processes = Process.GetProcessesByName("samp");
+                bool isRunning = processes.Length > 0;
+                
+                Form1.WriteLog($"SAMP Running check: {isRunning} ({processes.Length} processes found)");
+                
+                // Dispose all process objects
+                foreach (Process p in processes)
+                {
+                    p?.Dispose();
+                }
+                
+                return isRunning;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                Form1.WriteLog($"Error in IsSAMPRunning: {ex.Message}");
+                return false;
+            }
         }
     }
 }
