@@ -109,7 +109,7 @@ namespace bAntiCheat_Client
                         this.Invoke(new Action(() => {
                             Clipboard.SetText(text);
                         }));
-                        UpdateStatusLabel($"Join code {text} copied to clipboard");
+                        UpdateStatusLabel($"Access granted. Join code copied to clipboard.");
                     }
                     catch (Exception ex)
                     {
@@ -222,7 +222,7 @@ namespace bAntiCheat_Client
                                     }
                                     else
                                     {
-                                        UpdateStatusLabel("Access granted. You can now join the server.");
+                                        UpdateStatusLabel("Access granted. Code copied to clipboard.");
                                         WriteLog("CanConnect() passed - access granted");
                                     }
                                 }

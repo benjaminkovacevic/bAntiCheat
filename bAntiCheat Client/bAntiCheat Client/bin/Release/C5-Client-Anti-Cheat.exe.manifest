@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="C5-Client-Anti-Cheat.exe" size="264688">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="C5-Client-Anti-Cheat.exe" size="262640">
       <assemblyIdentity name="C5-Client-Anti-Cheat" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>62PRhjSAlkY6CLxBypoecPxDj1FLtd9fjdjQWnhy31I=</dsig:DigestValue>
+        <dsig:DigestValue>8T/zsOqM0FGIJCmnwdKYI3M6NKr7o71JaMKCdc+byDs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -87,13 +87,13 @@
       <dsig:DigestValue>7TcVA4M6tlWKLjeQLHDU3ntXHjARueztFpLDharB4pQ=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="C5-Client-Anti-Cheat.exe.config" size="184">
+  <file name="C5-Client-Anti-Cheat.exe.config" size="186">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>FihlZtVNgcNyH37Pf0Jtll3jZOm+L55ijXNjtoS2/mo=</dsig:DigestValue>
+      <dsig:DigestValue>1NgAxCSw4ibTXzWVy7D6Rw60Qih4Dn37KvGhG5Ora/s=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

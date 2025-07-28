@@ -1,0 +1,18 @@
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\C5-Client-Anti-Cheat.exe.config
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\C5-Client-Anti-Cheat.exe.manifest
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\C5-Client-Anti-Cheat.application
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\C5-Client-Anti-Cheat.exe
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\C5-Client-Anti-Cheat.pdb
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\MaterialSkin.dll
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\Newtonsoft.Json.dll
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Release\Newtonsoft.Json.xml
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\bAntiCheat Client.csproj.AssemblyReference.cache
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\bAntiCheat_Client.Form1.resources
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\C5_Client_Anti_Cheat.Properties.Resources.resources
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\bAntiCheat Client.csproj.GenerateResource.cache
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\bAntiCheat Client.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\C5-Client-Anti-Cheat.exe.manifest
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\C5-Client-Anti-Cheat.application
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\bAntiChe.0F732AA9.Up2Date
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\C5-Client-Anti-Cheat.exe
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Release\C5-Client-Anti-Cheat.pdb
