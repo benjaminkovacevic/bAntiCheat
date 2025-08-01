@@ -50,6 +50,9 @@ namespace bAntiCheat_Client
             // Make IP text box read-only
             textBoxIp.ReadOnly = true;
             textBoxPort.ReadOnly = true;
+            
+            // Initially hide the join code until access is granted
+            joinCodeLabel.Visible = false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -73,9 +76,25 @@ namespace bAntiCheat_Client
             ToggleConnectButton(false);
         }
 
-        private void UpdateStatusLabel(string text)
+        private void UpdateStatusLabel(string text, bool isAccessGranted = false)
         {
-            MethodInvoker action = delegate { statusLabel.Text = text; statusLabel.Visible = true; };
+            MethodInvoker action = delegate { 
+                statusLabel.Text = text; 
+                statusLabel.Visible = true;
+                
+                // Set color and font based on message type
+                if (isAccessGranted && text.Contains("Access granted"))
+                {
+                    statusLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    statusLabel.ForeColor = System.Drawing.Color.Black;
+                }
+                
+                // Make text bold
+                statusLabel.Font = new System.Drawing.Font(statusLabel.Font, System.Drawing.FontStyle.Bold);
+            };
             statusLabel.BeginInvoke(action);
         }
 
@@ -97,8 +116,17 @@ namespace bAntiCheat_Client
         private void UpdateJoinCodeLabel(string text)
         {
             MethodInvoker action = delegate { 
-                joinCodeLabel.Text = text; 
-                joinCodeLabel.Visible = !string.IsNullOrEmpty(text);
+                // Only show join code when access is granted (text is not empty)
+                if (!string.IsNullOrEmpty(text))
+                {
+                    joinCodeLabel.Text = text;
+                    joinCodeLabel.Visible = true;
+                }
+                else
+                {
+                    joinCodeLabel.Text = "";
+                    joinCodeLabel.Visible = false;
+                }
                 
                 // Auto-copy to clipboard when join code is displayed
                 if (!string.IsNullOrEmpty(text))
@@ -109,7 +137,7 @@ namespace bAntiCheat_Client
                         this.Invoke(new Action(() => {
                             Clipboard.SetText(text);
                         }));
-                        UpdateStatusLabel($"Access granted. Join code copied to clipboard.");
+                        UpdateStatusLabel($"Access granted. Join code copied to clipboard.", true);
                     }
                     catch (Exception ex)
                     {
@@ -174,7 +202,8 @@ namespace bAntiCheat_Client
                 try
                 {
                     p.generateNewJoinCode();
-                    UpdateJoinCodeLabel(p.joinCode.ToString());
+                    // Don't show join code yet - wait until access is granted
+                    // UpdateJoinCodeLabel(p.joinCode.ToString());
 
                     string welcomeMsg = string.Format("CONNECTED:{0}|{1}|{2}", p.uniqueID, p.securityID, p.joinCode);
                     SendMessage(welcomeMsg);
@@ -222,7 +251,8 @@ namespace bAntiCheat_Client
                                     }
                                     else
                                     {
-                                        UpdateStatusLabel("Access granted. Code copied to clipboard.");
+                                        // Show the join code when access is granted
+                                        UpdateJoinCodeLabel(p.joinCode.ToString());
                                         WriteLog("CanConnect() passed - access granted");
                                     }
                                 }
