@@ -39,7 +39,7 @@ namespace bAntiCheat_Client
             }
 
             // Always overwrite IP and port to these values
-            string defaultIp = "185.198.27.242";
+            string defaultIp = "code5lscnr.com";
             string defaultPort = "9014";
             File.WriteAllLines(Path.Combine(dataPath, "data.txt"), new string[] { defaultIp, defaultPort });
 
@@ -410,7 +410,7 @@ namespace bAntiCheat_Client
 
         private void materialRaisedButton2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("lscnr.code5gaming.com/anticheat.php\n\nVersion 2.0", "About", MessageBoxButtons.OK);
+            MessageBox.Show("code5lscnr.com/anticheat.php\n\nVersion 2.1", "About", MessageBoxButtons.OK);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
