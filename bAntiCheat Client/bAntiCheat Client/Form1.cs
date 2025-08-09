@@ -53,6 +53,9 @@ namespace bAntiCheat_Client
             
             // Initially hide the join code until access is granted
             joinCodeLabel.Visible = false;
+            
+            // Set window size (Width, Height)
+            this.Size = new System.Drawing.Size(450, 280);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -137,7 +140,7 @@ namespace bAntiCheat_Client
                         this.Invoke(new Action(() => {
                             Clipboard.SetText(text);
                         }));
-                        UpdateStatusLabel($"Access granted. Join code copied to clipboard.", true);
+                        UpdateStatusLabel($"Access granted. Code copied to clipboard.", true);
                     }
                     catch (Exception ex)
                     {

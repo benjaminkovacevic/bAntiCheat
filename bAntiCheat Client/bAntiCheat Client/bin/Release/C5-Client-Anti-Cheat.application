@@ -7,14 +7,14 @@
     <framework targetVersion="4.6.1" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="C5-Client-Anti-Cheat.exe.manifest" size="4975">
+    <dependentAssembly dependencyType="install" codebase="C5-Client-Anti-Cheat.exe.manifest" size="74512">
       <assemblyIdentity name="C5-Client-Anti-Cheat.exe" version="1.0.0.0" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>XjZnxTiuoVgoWzxmu0I2wxFGrRenG6f5N0i8CTI23X8=</dsig:DigestValue>
+        <dsig:DigestValue>G/85FgzzHmF3ZEazLTltHARHZ8Pox65bEw3TDSOy/6s=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
