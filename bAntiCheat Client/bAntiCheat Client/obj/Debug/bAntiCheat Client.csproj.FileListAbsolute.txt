@@ -3,8 +3,6 @@ C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Clien
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\C5-Client-Anti-Cheat.application
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\C5-Client-Anti-Cheat.exe
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\C5-Client-Anti-Cheat.pdb
-C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\MaterialSkin.dll
-C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\bAntiCheat Client.csproj.AssemblyReference.cache
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\bAntiCheat_Client.Form1.resources
@@ -17,3 +15,6 @@ C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Clien
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.exe
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.pdb
 C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\C5-Client-Anti-Cheat.exe.config
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\bAntiCheat Client.csproj.SuggestedBindingRedirects.cache
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\bAntiCheat Client.csproj.Fody.CopyLocal.cache
+C:\Users\Korisnik\Documents\GitHub\bAntiCheat\bAntiCheat Client\bAntiCheat Client\obj\Debug\bAntiCheat Client.csproj.Fody.RuntimeCopyLocal.cache

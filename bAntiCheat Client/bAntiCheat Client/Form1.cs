@@ -239,7 +239,7 @@ namespace bAntiCheat_Client
 
                                 if (serverMessage.Contains("CONNECTED"))
                                 {
-                                    UpdateStatusLabel("Validating system configuration...");
+                                    UpdateStatusLabel("Validating game files...");
 
                                     string[] temp = serverMessage.Split('|');
                                     AC = new Anticheat(temp[1].Trim());
@@ -371,7 +371,9 @@ namespace bAntiCheat_Client
                                 {
                                     WriteLog("Received WRONG_SEC_CODE - client needs update");
                                     socketConnection.Close();
-                                    UpdateStatusLabel("Please download the latest client version");
+                                    UpdateStatusLabel("Version mismatch. Please update.");
+                                    // Show update URL to user
+                                    MessageBox.Show("Download the latest version at:\nhttps://code5lscnr.com/anticheat.php", "Update Required", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     UpdateJoinCodeLabel("");
                                     ToggleConnectButton(true);
                                     break; // Exit the inner while loop

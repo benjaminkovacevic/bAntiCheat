@@ -3,9 +3,11 @@ using System;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
+using System.Linq; // Add this at the top if not present
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace bAntiCheat_Client
 {
@@ -35,8 +37,8 @@ namespace bAntiCheat_Client
 
             return true;
         }
-
-        public bool CanConnect()
+        
+public bool CanConnect()
         {
             req = new Request(schemaUrl);
             bool clean = true;
@@ -50,8 +52,8 @@ namespace bAntiCheat_Client
                     dynamic forbiddenDirectoriesResponse = CheckForbiddenDirectories();
                     dynamic forbiddenProcessesResponse = CheckForbiddenProcesses();
                     dynamic forbiddenChecksumsResponse = CheckForbiddenChecksums();
-                    dynamic whitelistedDirectoriesResponse = CheckWhitelistedDirectories(); 
-
+                    dynamic whitelistedDirectoriesResponse = CheckWhitelistedDirectories();
+                    dynamic asiCheck = CheckWhitelistedAsiFiles();
 
                     if (validateFilesResponse.passed == false)
                     {
@@ -64,8 +66,6 @@ namespace bAntiCheat_Client
                             clean = false;
                         }
                     }
-
-
 
                     if (forbiddenDirectoriesResponse.passed == false)
                     {
@@ -111,7 +111,7 @@ namespace bAntiCheat_Client
                             clean = false;
                         }
                     }
-                    
+
                     if (whitelistedDirectoriesResponse.passed == false)
                     {
                         if (whitelistedDirectoriesResponse.directory.action == "PREVENT_CONNECT")
@@ -123,15 +123,93 @@ namespace bAntiCheat_Client
                             clean = false;
                         }
                     }
+
+                    if (asiCheck.passed == false)
+                    {
+                        MessageBox.Show(
+                            "Non-whitelisted ASI file detected!\n\nFile: " + asiCheck.asiFile + "\nPath: " + asiCheck.filePath,
+                            "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        clean = false;
+                    }
+                }
+                else
+                {
+                    Form1.WriteLog("ERROR: req.info je null! JSON nije učitan ili je neispravan.");
+                    MessageBox.Show(
+                        "Anticheat config nije učitan ili je neispravan. Konekcija nije dozvoljena.",
+                        "Anticheat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    clean = false;
                 }
             }
             catch (Exception ex)
             {
                 Form1.WriteLog(ex.ToString());
+                clean = false;
             }
 
             return clean;
         }
+
+public object CheckWhitelistedAsiFiles()
+{
+    
+    string gtaPath = GetGTADirectory();
+    dynamic response = new ExpandoObject();
+    response.passed = true;
+    response.asiFile = null;
+    response.filePath = null;
+    
+    // LOG: Provera whitelist-e
+            Form1.WriteLog("ASI whitelist null? " + (req.info.whitelistedAsiFiles == null));
+    Form1.WriteLog("ASI whitelist length: " + (req.info.whitelistedAsiFiles == null ? "null" : req.info.whitelistedAsiFiles.Length.ToString()));
+    if (req.info.whitelistedAsiFiles != null)
+    {
+        foreach (var w in req.info.whitelistedAsiFiles)
+            Form1.WriteLog("Whitelist ASI: " + w.filename + " | " + w.hash);
+    }
+
+    // Ako nema whitelist-e, svi .asi fajlovi su zabranjeni
+    if (req.info.whitelistedAsiFiles == null || req.info.whitelistedAsiFiles.Length == 0)
+    {
+        string[] asiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
+        foreach (var file in asiFiles)
+            Form1.WriteLog("Found ASI (no whitelist): " + Path.GetFileName(file));
+        if (asiFiles.Length > 0)
+        {
+            response.passed = false;
+            response.asiFile = Path.GetFileName(asiFiles[0]);
+            response.filePath = asiFiles[0];
+        }
+        return response;
+    }
+
+    // Proveri svaki .asi fajl u GTA folderu
+    string[] allAsiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
+    foreach (string filePath in allAsiFiles)
+    {
+        string fileName = Path.GetFileName(filePath);
+        string fileHash = GetChecksum(filePath).ToUpperInvariant();
+        Form1.WriteLog("Found ASI: " + fileName + " | " + fileHash);
+
+        // Da li je na whitelist-i?
+        bool found = req.info.whitelistedAsiFiles.Any(w =>
+            w.filename.Equals(fileName, StringComparison.OrdinalIgnoreCase) &&
+            w.hash.Equals(fileHash, StringComparison.OrdinalIgnoreCase)
+        );
+
+        Form1.WriteLog("Is whitelisted: " + found);
+
+        if (!found)
+        {
+            response.passed = false;
+            response.asiFile = fileName;
+            response.filePath = filePath;
+            return response;
+        }
+    }
+
+    return response;
+}
 
         public static string GetChecksum(string file)
         {
@@ -181,11 +259,20 @@ namespace bAntiCheat_Client
 
         public object CheckForbiddenFiles()
         {
-            string gtaPath = GetGTADirectory();
-
             dynamic response = new ExpandoObject();
             response.passed = true;
             response.file = null;
+
+            // Provera da li je req, req.info ili req.info.forbiddenFiles null
+            if (req == null || req.info == null || req.info.forbiddenFiles == null)
+            {
+                Form1.WriteLog("ERROR: req, req.info ili req.info.forbiddenFiles je null u CheckForbiddenFiles!");
+                response.passed = false;
+                response.error = "req, req.info ili req.info.forbiddenFiles je null";
+                return response;
+            }
+
+            string gtaPath = GetGTADirectory();
 
             foreach (Forbiddenfile file in req.info.forbiddenFiles)
             {
@@ -193,6 +280,7 @@ namespace bAntiCheat_Client
 
                 if (File.Exists(filePath))
                 {
+                    Form1.WriteLog("Forbidden file detected: " + filePath);
                     response.passed = false;
                     response.file = file;
                     break;
@@ -264,48 +352,48 @@ namespace bAntiCheat_Client
             return response;
         }
 
-    public object CheckForbiddenProcesses()
-    {
-        dynamic response = new ExpandoObject();
-        response.passed = true;
-        response.process = null;
-
-        try
+        public object CheckForbiddenProcesses()
         {
-            foreach (Forbiddenprocess process in req.info.forbiddenProcesses)
+            dynamic response = new ExpandoObject();
+            response.passed = true;
+            response.process = null;
+
+            try
             {
-                Process[] processes = Process.GetProcessesByName(process.name);
-                
-                if (processes.Length > 0)
+                foreach (Forbiddenprocess process in req.info.forbiddenProcesses)
                 {
-                    Form1.WriteLog($"Forbidden process detected: {process.name}");
-                    response.passed = false;
-                    response.process = process;
+                    Process[] processes = Process.GetProcessesByName(process.name);
                     
-                    // Dispose all process objects
+                    if (processes.Length > 0)
+                    {
+                        Form1.WriteLog($"Forbidden process detected: {process.name}");
+                        response.passed = false;
+                        response.process = process;
+                        
+                        // Dispose all process objects
+                        foreach (Process p in processes)
+                        {
+                            p?.Dispose();
+                        }
+                        
+                        break;
+                    }
+                    
+                    // Dispose process objects even if none found
                     foreach (Process p in processes)
                     {
                         p?.Dispose();
                     }
-                    
-                    break;
-                }
-                
-                // Dispose process objects even if none found
-                foreach (Process p in processes)
-                {
-                    p?.Dispose();
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            Form1.WriteLog($"Error in CheckForbiddenProcesses: {ex.Message}");
-            // Return passed = true to avoid false positives on errors
-        }
+            catch (Exception ex)
+            {
+                Form1.WriteLog($"Error in CheckForbiddenProcesses: {ex.Message}");
+                // Return passed = true to avoid false positives on errors
+            }
 
-        return response;
-    }
+            return response;
+        }
 
         public object CheckForbiddenDirectories()
         {
@@ -330,51 +418,51 @@ namespace bAntiCheat_Client
             return response;
         }
 
-public object CheckForbiddenChecksums()
-{
-    string gtaPath = GetGTADirectory();
-    dynamic response = new ExpandoObject();
-    response.passed = true;
-    response.checksum = null;
-    response.filePath = null;
-
-    const long maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
-
-    foreach (Forbiddenchecksum checksumItem in req.info.forbiddenChecksums)
-    {
-        // Search through all files in GTA directory and subdirectories
-        string[] allFiles = Directory.GetFiles(gtaPath, "*.*", SearchOption.AllDirectories);
-        
-        foreach (string filePath in allFiles)
+        public object CheckForbiddenChecksums()
         {
-            try
-            {
-                // Check file size before calculating checksum
-                FileInfo fileInfo = new FileInfo(filePath);
-                if (fileInfo.Length > maxFileSize)
-                {
-                    continue; // Skip files larger than 5MB
-                }
+            string gtaPath = GetGTADirectory();
+            dynamic response = new ExpandoObject();
+            response.passed = true;
+            response.checksum = null;
+            response.filePath = null;
 
-                string fileChecksum = GetChecksum(filePath);
-                if (fileChecksum.Equals(checksumItem.hash, StringComparison.OrdinalIgnoreCase))
+            const long maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
+            foreach (Forbiddenchecksum checksumItem in req.info.forbiddenChecksums)
+            {
+                // Search through all files in GTA directory and subdirectories
+                string[] allFiles = Directory.GetFiles(gtaPath, "*.*", SearchOption.AllDirectories);
+                
+                foreach (string filePath in allFiles)
                 {
-                    response.passed = false;
-                    response.checksum = checksumItem;
-                    response.filePath = filePath;
-                    return response; // Exit immediately when found
+                    try
+                    {
+                        // Check file size before calculating checksum
+                        FileInfo fileInfo = new FileInfo(filePath);
+                        if (fileInfo.Length > maxFileSize)
+                        {
+                            continue; // Skip files larger than 5MB
+                        }
+
+                        string fileChecksum = GetChecksum(filePath);
+                        if (fileChecksum.Equals(checksumItem.hash, StringComparison.OrdinalIgnoreCase))
+                        {
+                            response.passed = false;
+                            response.checksum = checksumItem;
+                            response.filePath = filePath;
+                            return response; // Exit immediately when found
+                        }
+                    }
+                    catch
+                    {
+                        // Skip files that can't be read (locked, permissions, etc.)
+                        continue;
+                    }
                 }
             }
-            catch
-            {
-                // Skip files that can't be read (locked, permissions, etc.)
-                continue;
-            }
+
+            return response;
         }
-    }
-
-    return response;
-}
 
         public static string GetGTADirectory()
         {

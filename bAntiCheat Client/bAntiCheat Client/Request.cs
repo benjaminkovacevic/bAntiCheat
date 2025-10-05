@@ -2,6 +2,8 @@
 using System;
 using System.Net;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
 
 namespace bAntiCheat_Client
 {
@@ -31,19 +33,27 @@ namespace bAntiCheat_Client
         }
     }
 
-public class Rootobject
-{
-    public bool gtaRunning { get; set; }
-    public bool sampRunning { get; set; }
-    public bool monitorProcessesConstantly { get; set; }
-    public Validationfile[] validationFiles { get; set; }
-    public Forbiddenfile[] forbiddenFiles { get; set; }
-    public Forbiddenndirectory[] forbiddenDirectories { get; set; }
-    public Forbiddenprocess[] forbiddenProcesses { get; set; }
-    public Forbiddenchecksum[] forbiddenChecksums { get; set; }
-    public Whitelisteddirectory[] whitelistedDirectories { get; set; } // Add this line
-}
+    public class Rootobject
+    {
+        public bool gtaRunning { get; set; }
+        public bool sampRunning { get; set; }
+        public bool monitorProcessesConstantly { get; set; }
+        public Validationfile[] validationFiles { get; set; }
+        public Forbiddenfile[] forbiddenFiles { get; set; }
+        public Forbiddenndirectory[] forbiddenDirectories { get; set; }
+        public Forbiddenprocess[] forbiddenProcesses { get; set; }
+        public Forbiddenchecksum[] forbiddenChecksums { get; set; }
+        public Whitelisteddirectory[] whitelistedDirectories { get; set; } // Add this line
+        public WhitelistedAsiFile[] whitelistedAsiFiles { get; set; }
+    }
 
+
+    public class WhitelistedAsiFile
+    {
+        public string filename { get; set; }
+        public string hash { get; set; }
+        public string description { get; set; }
+    }
     public class Validationfile
     {
         public string path { get; set; }
