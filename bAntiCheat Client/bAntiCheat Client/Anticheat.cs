@@ -150,66 +150,66 @@ public bool CanConnect()
             return clean;
         }
 
-public object CheckWhitelistedAsiFiles()
-{
-    
-    string gtaPath = GetGTADirectory();
-    dynamic response = new ExpandoObject();
-    response.passed = true;
-    response.asiFile = null;
-    response.filePath = null;
-    
-    // LOG: Provera whitelist-e
-            Form1.WriteLog("ASI whitelist null? " + (req.info.whitelistedAsiFiles == null));
-    Form1.WriteLog("ASI whitelist length: " + (req.info.whitelistedAsiFiles == null ? "null" : req.info.whitelistedAsiFiles.Length.ToString()));
-    if (req.info.whitelistedAsiFiles != null)
+    public object CheckWhitelistedAsiFiles()
     {
-        foreach (var w in req.info.whitelistedAsiFiles)
-            Form1.WriteLog("Whitelist ASI: " + w.filename + " | " + w.hash);
-    }
-
-    // Ako nema whitelist-e, svi .asi fajlovi su zabranjeni
-    if (req.info.whitelistedAsiFiles == null || req.info.whitelistedAsiFiles.Length == 0)
-    {
-        string[] asiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
-        foreach (var file in asiFiles)
-            Form1.WriteLog("Found ASI (no whitelist): " + Path.GetFileName(file));
-        if (asiFiles.Length > 0)
+        
+        string gtaPath = GetGTADirectory();
+        dynamic response = new ExpandoObject();
+        response.passed = true;
+        response.asiFile = null;
+        response.filePath = null;
+        
+        // LOG: Provera whitelist-e
+                Form1.WriteLog("ASI whitelist null? " + (req.info.whitelistedAsiFiles == null));
+        Form1.WriteLog("ASI whitelist length: " + (req.info.whitelistedAsiFiles == null ? "null" : req.info.whitelistedAsiFiles.Length.ToString()));
+        if (req.info.whitelistedAsiFiles != null)
         {
-            response.passed = false;
-            response.asiFile = Path.GetFileName(asiFiles[0]);
-            response.filePath = asiFiles[0];
+            foreach (var w in req.info.whitelistedAsiFiles)
+                Form1.WriteLog("Whitelist ASI: " + w.filename + " | " + w.hash);
         }
-        return response;
-    }
 
-    // Proveri svaki .asi fajl u GTA folderu
-    string[] allAsiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
-    foreach (string filePath in allAsiFiles)
-    {
-        string fileName = Path.GetFileName(filePath);
-        string fileHash = GetChecksum(filePath).ToUpperInvariant();
-        Form1.WriteLog("Found ASI: " + fileName + " | " + fileHash);
-
-        // Da li je na whitelist-i?
-        bool found = req.info.whitelistedAsiFiles.Any(w =>
-            w.filename.Equals(fileName, StringComparison.OrdinalIgnoreCase) &&
-            w.hash.Equals(fileHash, StringComparison.OrdinalIgnoreCase)
-        );
-
-        Form1.WriteLog("Is whitelisted: " + found);
-
-        if (!found)
+        // Ako nema whitelist-e, svi .asi fajlovi su zabranjeni
+        if (req.info.whitelistedAsiFiles == null || req.info.whitelistedAsiFiles.Length == 0)
         {
-            response.passed = false;
-            response.asiFile = fileName;
-            response.filePath = filePath;
+            string[] asiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
+            foreach (var file in asiFiles)
+                Form1.WriteLog("Found ASI (no whitelist): " + Path.GetFileName(file));
+            if (asiFiles.Length > 0)
+            {
+                response.passed = false;
+                response.asiFile = Path.GetFileName(asiFiles[0]);
+                response.filePath = asiFiles[0];
+            }
             return response;
         }
-    }
 
-    return response;
-}
+        // Proveri svaki .asi fajl u GTA folderu
+        string[] allAsiFiles = Directory.GetFiles(gtaPath, "*.asi", SearchOption.TopDirectoryOnly);
+        foreach (string filePath in allAsiFiles)
+        {
+            string fileName = Path.GetFileName(filePath);
+            string fileHash = GetChecksum(filePath).ToUpperInvariant();
+            Form1.WriteLog("Found ASI: " + fileName + " | " + fileHash);
+
+            // Da li je na whitelist-i?
+            bool found = req.info.whitelistedAsiFiles.Any(w =>
+                w.filename.Equals(fileName, StringComparison.OrdinalIgnoreCase) &&
+                w.hash.Equals(fileHash, StringComparison.OrdinalIgnoreCase)
+            );
+
+            Form1.WriteLog("Is whitelisted: " + found);
+
+            if (!found)
+            {
+                response.passed = false;
+                response.asiFile = fileName;
+                response.filePath = filePath;
+                return response;
+            }
+        }
+
+        return response;
+    }
 
         public static string GetChecksum(string file)
         {
