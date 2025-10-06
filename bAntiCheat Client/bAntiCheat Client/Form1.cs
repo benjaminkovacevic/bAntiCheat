@@ -244,10 +244,10 @@ namespace bAntiCheat_Client
                                     string[] temp = serverMessage.Split('|');
                                     AC = new Anticheat(temp[1].Trim());
 
-                                    if(!AC.CanConnect())
+                                    if(!AC.CanConnect(false))
                                     {
                                         socketConnection.Close();
-                                        UpdateStatusLabel("Server socket closed the connection");
+                                        UpdateStatusLabel("File validation failed. Access denied.");
                                         UpdateJoinCodeLabel("");
                                         ToggleConnectButton(true);
                                         WriteLog("CanConnect() returned false - disconnecting");

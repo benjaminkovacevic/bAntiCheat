@@ -40,9 +40,6 @@ namespace bAntiCheat_Client
         
         public bool CanConnect(bool recheckProcesses = false)
         {
-            if (!recheckProcesses)
-
-
             req = new Request(schemaUrl);
             bool clean = true;
 
@@ -165,10 +162,11 @@ namespace bAntiCheat_Client
                         {
                             if (!recheckProcesses)
                             {
+                                string gtaPath = GetGTADirectory();
                                 string message = "Non-whitelisted files detected :\n\n" +
-                                "Directory: " + whitelistedDirectoriesResponse.directory.path + "\n\n";
+                                "Directory: " + Path.Combine(gtaPath, whitelistedDirectoriesResponse.directory.path) + "\n\n";
 
-                                foreach (string filePath in Directory.GetFiles(whitelistedDirectoriesResponse.directory.path, "*.*", SearchOption.AllDirectories))
+                                foreach (string filePath in Directory.GetFiles(Path.Combine(gtaPath, whitelistedDirectoriesResponse.directory.path), "*.*", SearchOption.AllDirectories))
                                 {
                                     string fileName = Path.GetFileName(filePath);
                                     var allowedFiles = (IEnumerable<dynamic>)whitelistedDirectoriesResponse.directory.allowedFiles;
