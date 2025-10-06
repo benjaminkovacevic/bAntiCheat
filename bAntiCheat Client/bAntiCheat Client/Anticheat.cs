@@ -38,8 +38,11 @@ namespace bAntiCheat_Client
             return true;
         }
         
-public bool CanConnect()
+        public bool CanConnect(bool recheckProcesses = false)
         {
+            if (!recheckProcesses)
+
+
             req = new Request(schemaUrl);
             bool clean = true;
 
@@ -59,9 +62,20 @@ public bool CanConnect()
                     {
                         if (validateFilesResponse.file.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Changed gamefiles detected. Please use the original ones." +
-                            "\n\nFile: " + validateFilesResponse.file.path +
-                            "\nReason: " + validateFilesResponse.reason, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            if (!recheckProcesses)
+                            {
+                                string message = "Changed game files detected. Please use the original ones:\n\n";
+                                foreach (var file in req.info.validationFiles)
+                                {
+                                    string filePath = Path.Combine(GetGTADirectory(), file.path);
+                                    if (!File.Exists(filePath) || GetChecksum(filePath).ToUpper() != file.hash.ToUpper())
+                                    {
+                                        message += $"File: {file.path}\nReason: {(File.Exists(filePath) ? "checksum differs from original" : "file doesn't exist")}\n\n";
+                                    }
+                                }
+                                MessageBox.Show(message, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
 
                             clean = false;
                         }
@@ -71,8 +85,19 @@ public bool CanConnect()
                     {
                         if (forbiddenDirectoriesResponse.directory.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden directory detected. Please delete it and click connect again" +
-                            "\n\nDirectory: " + forbiddenDirectoriesResponse.directory.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            if (!recheckProcesses)
+                            {
+                                string message = "Non-whitelisted directories detected:\n\n";
+                                foreach (var directory in req.info.forbiddenDirectories)
+                                {
+                                    string directoryPath = Path.Combine(GetGTADirectory(), directory.path);
+                                    if (Directory.Exists(directoryPath))
+                                    {
+                                        message += $"Directory: {directoryPath}\n";
+                                    }
+                                }
+                                MessageBox.Show(message, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
 
                             clean = false;
                         }
@@ -82,8 +107,19 @@ public bool CanConnect()
                     {
                         if (forbiddenFilesResponse.file.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden file detected. Please delete it and click connect again" +
-                            "\n\nFile: " + forbiddenFilesResponse.file.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            if (!recheckProcesses)
+                            {
+                                string message = "Forbidden files detected. Please delete them and click connect again:\n\n";
+                                foreach (var file in req.info.forbiddenFiles)
+                                {
+                                    string filePath = Path.Combine(GetGTADirectory(), file.path);
+                                    if (File.Exists(filePath))
+                                    {
+                                        message += $"File: {filePath}\n";
+                                    }
+                                }
+                                MessageBox.Show(message, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
 
                             clean = false;
                         }
@@ -93,9 +129,11 @@ public bool CanConnect()
                     {
                         if (forbiddenProcessesResponse.process.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden process detected. Please kill it and click connect again" +
-                            "\n\nProcess: " + forbiddenProcessesResponse.process.name + ".exe", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                            if (!recheckProcesses)
+                            {
+                                MessageBox.Show("Forbidden process detected. Please kill it and click connect again" +
+                                "\n\nProcess: " + forbiddenProcessesResponse.process.name + ".exe", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                             clean = false;
                         }
                     }
@@ -104,10 +142,19 @@ public bool CanConnect()
                     {
                         if (forbiddenChecksumsResponse.checksum.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Forbidden file detected. Please delete it and click connect again" +
-                            "\n\nFile: " + forbiddenChecksumsResponse.filePath +
-                            "\nDescription: " + forbiddenChecksumsResponse.checksum.description, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                            if (!recheckProcesses)
+                            {
+                                string message = "Forbidden files detected. Please delete them and click connect again:\n\n";
+                                foreach (var file in Directory.GetFiles(GetGTADirectory(), "*.*", SearchOption.AllDirectories))
+                                {
+                                    string fileChecksum = GetChecksum(file);
+                                    if (req.info.forbiddenChecksums.Any(checksumItem => checksumItem.hash.Equals(fileChecksum, StringComparison.OrdinalIgnoreCase)))
+                                    {
+                                        message += $"File: {file}\nDescription: {req.info.forbiddenChecksums.First(checksumItem => checksumItem.hash.Equals(fileChecksum, StringComparison.OrdinalIgnoreCase)).description}\n\n";
+                                    }
+                                }
+                                MessageBox.Show(message, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                             clean = false;
                         }
                     }
@@ -116,9 +163,27 @@ public bool CanConnect()
                     {
                         if (whitelistedDirectoriesResponse.directory.action == "PREVENT_CONNECT")
                         {
-                            MessageBox.Show("Non-whitelisted file detected in cleo directory. Please remove it and click connect again" +
-                            "\n\nFile: " + whitelistedDirectoriesResponse.invalidFile +
-                            "\nDirectory: " + whitelistedDirectoriesResponse.directory.path, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            if (!recheckProcesses)
+                            {
+                                string message = "Non-whitelisted files detected :\n\n" +
+                                "Directory: " + whitelistedDirectoriesResponse.directory.path + "\n\n";
+
+                                foreach (string filePath in Directory.GetFiles(whitelistedDirectoriesResponse.directory.path, "*.*", SearchOption.AllDirectories))
+                                {
+                                    string fileName = Path.GetFileName(filePath);
+                                    var allowedFiles = (IEnumerable<dynamic>)whitelistedDirectoriesResponse.directory.allowedFiles;
+                                    bool fileAllowed = allowedFiles.Any(allowedFile =>
+                                        fileName.Equals((string)allowedFile.filename, StringComparison.OrdinalIgnoreCase) &&
+                                        GetChecksum(filePath).Equals((string)allowedFile.hash, StringComparison.OrdinalIgnoreCase));
+
+                                    if (!fileAllowed)
+                                    {
+                                        message += $"File: {filePath}\n";
+                                    }
+                                }
+
+                                MessageBox.Show(message, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
 
                             clean = false;
                         }
@@ -126,18 +191,40 @@ public bool CanConnect()
 
                     if (asiCheck.passed == false)
                     {
-                        MessageBox.Show(
-                            "Non-whitelisted ASI file detected!\n\nFile: " + asiCheck.asiFile + "\nPath: " + asiCheck.filePath,
-                            "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (!recheckProcesses)
+                        {
+                            string message = "Non-whitelisted files detected!\n\n";
+                            foreach (var file in Directory.GetFiles(GetGTADirectory(), "*.asi", SearchOption.TopDirectoryOnly))
+                            {
+                                string fileName = Path.GetFileName(file);
+                                string fileHash = GetChecksum(file).ToUpperInvariant();
+                                bool found = req.info.whitelistedAsiFiles.Any(w =>
+                                    w.filename.Equals(fileName, StringComparison.OrdinalIgnoreCase) &&
+                                    w.hash.Equals(fileHash, StringComparison.OrdinalIgnoreCase)
+                                );
+
+                                if (!found)
+                                {
+                                    message += $"File: {fileName}\nPath: {file}\n\n";
+                                }
+                            }
+
+                            MessageBox.Show(
+                                message,
+                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                         clean = false;
                     }
                 }
                 else
                 {
                     Form1.WriteLog("ERROR: req.info je null! JSON nije učitan ili je neispravan.");
-                    MessageBox.Show(
-                        "Anticheat config nije učitan ili je neispravan. Konekcija nije dozvoljena.",
-                        "Anticheat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (!recheckProcesses)
+                    {
+                        MessageBox.Show(
+                            "Configuration failed to load.",
+                            "Anticheat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     clean = false;
                 }
             }

@@ -55,7 +55,7 @@
             this.materialLabel1.BackColor = System.Drawing.SystemColors.Control;
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel1.ForeColor = System.Drawing.Color.Blue;
             this.materialLabel1.Location = new System.Drawing.Point(12, 83);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
@@ -85,7 +85,7 @@
             this.statusLabel.BackColor = System.Drawing.Color.White;
             this.statusLabel.Depth = 0;
             this.statusLabel.Font = new System.Drawing.Font("Roboto", 11F);
-            this.statusLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.statusLabel.ForeColor = System.Drawing.Color.Yellow;
             this.statusLabel.Location = new System.Drawing.Point(12, 189);
             this.statusLabel.MouseState = MaterialSkin.MouseState.HOVER;
             this.statusLabel.Name = "statusLabel";
@@ -136,7 +136,7 @@
             this.materialLabel2.BackColor = System.Drawing.SystemColors.Control;
             this.materialLabel2.Depth = 0;
             this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel2.ForeColor = System.Drawing.Color.Red;
             this.materialLabel2.Location = new System.Drawing.Point(186, 83);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
@@ -172,7 +172,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Silver;
+            this.BackColor = System.Drawing.Color.Red;
             this.ClientSize = new System.Drawing.Size(354, 213);
             this.Controls.Add(this.materialRaisedButton2);
             this.Controls.Add(this.materialLabel2);
@@ -186,7 +186,7 @@
             this.Controls.Add(this.textBoxIp);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "C5 SA:MP AntiCheat Client";
+            this.Text = "C5 SA:MP AntiCheat Client V3.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);

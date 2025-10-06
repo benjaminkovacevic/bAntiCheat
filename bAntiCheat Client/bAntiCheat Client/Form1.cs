@@ -25,7 +25,7 @@ namespace bAntiCheat_Client
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey900, Primary.Grey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
 
             if (!Directory.Exists(dataPath))
             {
@@ -55,7 +55,7 @@ namespace bAntiCheat_Client
             joinCodeLabel.Visible = false;
             
             // Set window size (Width, Height)
-            this.Size = new System.Drawing.Size(450, 280);
+            this.Size = new System.Drawing.Size(450, 230);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -247,7 +247,7 @@ namespace bAntiCheat_Client
                                     if(!AC.CanConnect())
                                     {
                                         socketConnection.Close();
-                                        UpdateStatusLabel("Authentication failed");
+                                        UpdateStatusLabel("Server socket closed the connection");
                                         UpdateJoinCodeLabel("");
                                         ToggleConnectButton(true);
                                         WriteLog("CanConnect() returned false - disconnecting");
@@ -326,8 +326,8 @@ namespace bAntiCheat_Client
                                             }
                                             if (string.IsNullOrEmpty(pongMsg))
                                             {
-                                                WriteLog("PING Check 5: AC.CanConnect()");
-                                                if (!AC.CanConnect())
+                                                WriteLog("PING Check 5: AC.CanConnect() with recheckProcesses = true");
+                                                if (!AC.CanConnect(true))
                                                 {
                                                     pongMsg = string.Format("DROP:{0}", p.uniqueID);
                                                     WriteLog("PING FAILED: AC.CanConnect() returned false");
@@ -355,7 +355,7 @@ namespace bAntiCheat_Client
                                 {
                                     WriteLog("Received DSCN - server disconnecting client");
                                     socketConnection.Close();
-                                    UpdateStatusLabel("Disconnected by server");
+                                    UpdateStatusLabel("Connection terminated by server");
 
                                     MethodInvoker action = delegate { labelPlayerName.Visible = false; };
                                     labelPlayerName.BeginInvoke(action);
@@ -371,11 +371,19 @@ namespace bAntiCheat_Client
                                 {
                                     WriteLog("Received WRONG_SEC_CODE - client needs update");
                                     socketConnection.Close();
-                                    UpdateStatusLabel("Version mismatch. Please update.");
+                                    UpdateStatusLabel("Version mismatch. Please update the AntiCheat Client.");
+                                    LinkLabel updateLink = new LinkLabel
+                                    {
+                                        Text = "Download the latest version at: https://code5lscnr.com/anticheat.php",
+                                        AutoSize = true,
+                                        LinkColor = System.Drawing.Color.Blue,
+                                        Location = new System.Drawing.Point(statusLabel.Location.X, statusLabel.Location.Y + 20)
+                                    };
+                                    updateLink.Click += (s, e) => Process.Start("https://code5lscnr.com/anticheat.php");
+                                    this.Invoke(new Action(() => this.Controls.Add(updateLink)));
                                     // Show update URL to user
-                                    MessageBox.Show("Download the latest version at:\nhttps://code5lscnr.com/anticheat.php", "Update Required", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     UpdateJoinCodeLabel("");
-                                    ToggleConnectButton(true);
+                                    ToggleConnectButton(false);
                                     break; // Exit the inner while loop
                                 }
                             }
@@ -412,7 +420,7 @@ namespace bAntiCheat_Client
 
         private void materialRaisedButton2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("code5lscnr.com/anticheat.php\n\nVersion 2.1", "About", MessageBoxButtons.OK);
+            MessageBox.Show("code5lscnr.com/anticheat.php\n\nVersion 3.0", "About", MessageBoxButtons.OK);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
